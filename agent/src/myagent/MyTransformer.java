@@ -1,11 +1,9 @@
 package myagent;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -27,9 +25,7 @@ public class MyTransformer implements ClassFileTransformer
                     new ByteArrayInputStream(classfileBuffer)
                 );
                 CtMethod m = cc.getDeclaredMethod("main");
-                m.setBody("{ System.out.println(\"Bye, Bye!\");}");
-                    // "System.out.println(\"Sum of 80 + 75 = !\" + mylib.Adder.doInt(80,75)); }");
-                // m.insertBefore("{ System.out.println(\"=> Before main\"); }");
+                m.setBody("{ System.out.println(\"Bye, Bye! 🖐️\");}");
                 classfileBuffer = cc.toBytecode();
             } catch (IOException e) {
                 e.printStackTrace();
