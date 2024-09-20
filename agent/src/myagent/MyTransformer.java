@@ -18,14 +18,28 @@ public class MyTransformer implements ClassFileTransformer
             Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain,
             byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (className.equals("theapp/HelloWorld")) {
+        if (className.equals("theapp/Example")) {
             try {
                 ClassPool cp = ClassPool.getDefault();
-                CtClass cc = cp.makeClass(
-                    new ByteArrayInputStream(classfileBuffer)
-                );
-                CtMethod m = cc.getDeclaredMethod("main");
-                m.setBody("{ System.out.println(\"Bye, Bye! 🖐️\");}");
+                CtClass cc = cp.makeClass(new ByteArrayInputStream(classfileBuffer));
+                CtMethod getAgeMethod = cc.getDeclaredMethod("getAge");
+
+                // Add code to intercept the return value
+                getAgeMethod.insertBefore("{ System.out.println(\"Intercepted getAge()\"); }");
+                getAgeMethod.insertAfter("{ System.out.println(\"Return value: \" + $_); }");
+                // CtMethod m = cc.getDeclaredMethod("main");
+                // m.insertBefore("{ System.out.println(\"Hello, World! 🌍\");}");
+                // m.insertAfter("{ System.out.println(\"Bye, Bye! 🖐️🖐️\");}");
+                // classfileBuffer = cc.toBytecode();
+
+//                CtMethod myFunction = cc.getDeclaredMethod("myFunction");
+//                myFunction.insertBefore("{ System.out.println(\"Calling myFunction with third = \" + $3 ); }");
+//                myFunction.insertBefore("{ System.out.println(\"Calling myFunction with second = \" + $2 ); }");
+//                myFunction.insertBefore("{ System.out.println(\"Calling myFunction with first = \" + $1 ); }");
+//
+//                // Insert code after the original method call
+//                myFunction.insertAfter("{ System.out.println(\"Result: \" + $_); }");
+
                 classfileBuffer = cc.toBytecode();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -37,6 +51,7 @@ public class MyTransformer implements ClassFileTransformer
                 e.printStackTrace();
             }
         }
+        System.out.println(className);
         return classfileBuffer;
     }
 }

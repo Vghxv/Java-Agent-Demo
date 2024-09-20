@@ -1,2 +1,9 @@
+# Compiled source
 **/out/
+# Java
 **.jar
+# Intellij idea generated files
+.idea
+*.iml
+# misc
+*.zip
